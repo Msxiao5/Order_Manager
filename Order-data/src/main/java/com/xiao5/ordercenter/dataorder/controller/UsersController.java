@@ -41,7 +41,6 @@ public class UsersController {
         Users users = usersService.qryUsersById(id);
         if (null == users){
             log.info("【当前{}ID，无对应用户】",id);
-            return null;
         }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
