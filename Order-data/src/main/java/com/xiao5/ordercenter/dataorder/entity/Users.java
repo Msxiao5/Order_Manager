@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -22,6 +23,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ApiModel(value = "用户实体")
 @Table(name = "USERS")
+@Accessors(chain = true)
 public class Users implements Serializable{
 
     @Id
