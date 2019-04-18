@@ -7,3 +7,4 @@ spring:
     username: root
     password: Abc123!_
     driver-class-name: com.mysql.cj.jdbc.Driver
+

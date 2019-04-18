@@ -41,13 +41,17 @@ public class OrderentriesController {
     public Object showOrderList(){
         return orderentryService.showOrderList();
     }
-    @PostMapping("/Orderentry")
-    public String AddOrderentry(String orderentryid, String customercode, String customername, String custtyp,
+    @PostMapping("/Addorder")
+    public String AddOrderentry(String customercode, String customername, String custtyp,
                                 String merchandisecode, String merchandisename, String merchandisetype,
                                 String mdseshare, String accno, String currency, String netamount,
                                 String mdsecount, String mediatype, String authmethod, String devicecode,
                                 String channelcode, String channelserialno, String ordersdate, String orderstime,
-                                String crtdatetime, String remark){
+                                String remark){
+        long currenttime = System.currentTimeMillis();
+        int randomdata = (int)(1+Math.random()*100000);
+        String orderentryid = String.valueOf(currenttime) + String.valueOf(randomdata);
+        String crtdatetime = String.valueOf(currenttime).substring(0,13);
         return orderentryService.AddOrderentry(orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename,merchandisetype,mdseshare,accno,currency,netamount,mdsecount,mediatype,authmethod,devicecode,channelcode,channelserialno,ordersdate,orderstime,crtdatetime,remark);
 
     }

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * 用户业务层
  * @author WuTian Bing
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsersService {
 
-    @Autowired
+    @Resource
     UsersMapper usersMapper;
 
     /**
