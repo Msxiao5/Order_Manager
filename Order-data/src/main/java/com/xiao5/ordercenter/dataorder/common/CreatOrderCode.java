@@ -1,9 +1,9 @@
 package com.xiao5.ordercenter.dataorder.common;
 
 /**
- * @author ：mmzs
- * @date ：Created in 2019/4/18 17:18
- * @description：生成订单号
+ * @author ：tianyda$
+ * @date ：Created in 2019/4/18 17:20
+ * @description：订单号生成
  * @modified By：
  * @version: 1.0.0$
  */
