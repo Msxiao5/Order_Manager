@@ -30,7 +30,7 @@ public class OrderentryService {
         return orderentries;
     }
     //根据客户号查询订单列表
-    public List<Orderentries> getOrderListbycutcd(String customercode) {
+    public List<Orderentries> showOrderListbycutcd(String customercode) {
         log.info("【根据客户号查询订单列表】", customercode);
         return orderentryMapper.getOrderListbycutcd(customercode);
     }
