@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * @author ：mmzs
+ * @author ：tianyda
  * @date ：Created in 2019/4/18 11:45
  * @description：订单信息录入
  * @modified By：
