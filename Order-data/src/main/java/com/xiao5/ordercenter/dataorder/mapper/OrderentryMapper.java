@@ -46,7 +46,7 @@ public interface OrderentryMapper {
     List<Orderentries> getOrderList();
 
     @Select(value = "Select * from ORDERENTRY where customercode = #{customercode}")
-    List<OrderentryService> getOrderListbycutcd(String customercode);
+    List<Orderentries> getOrderListbycutcd(String customercode);
 
     @Insert("insert into ORDERENTRY (orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename,merchandisetype,mdseshare,accno,currency,netamount,mdsecount,mediatype,authmethod,devicecode,channelcode,channelserialno,ordersdate,orderstime,crtdatetime,remark) values (#{orderentryid},#{customercode},#{customername},#{custtyp},#{merchandisecode},#{merchandisename},#{merchandisetype},#{mdseshare},#{accno},#{currency},#{netamount},#{mdsecount},#{mediatype},#{authmethod},#{devicecode},#{channelcode},#{channelserialno},#{ordersdate},#{orderstime},#{crtdatetime},#{remark})")
     void AddOrderentry(Orderentries orderentries);
