@@ -1,6 +1,7 @@
 package com.xiao5.ordercenter.dataorder.mapper;
 
 import com.xiao5.ordercenter.dataorder.entity.Users;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,5 @@ public interface UsersMapper {
      */
     @Select("Select * from USERS where id = #{id}")
     Users qryUsersById(Long id);
+
 }
