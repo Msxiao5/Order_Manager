@@ -1,6 +1,6 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
-import com.xiao5.ordercenter.dataorder.entity.Orderentries;
+import com.xiao5.ordercenter.common.entity.order.Orderentries;
 import com.xiao5.ordercenter.dataorder.service.OrderentryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;

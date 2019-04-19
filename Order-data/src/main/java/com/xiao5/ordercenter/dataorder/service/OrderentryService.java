@@ -1,9 +1,9 @@
 package com.xiao5.ordercenter.dataorder.service;
 
+import com.xiao5.ordercenter.common.entity.order.Orderentries;
 import com.xiao5.ordercenter.dataorder.mapper.OrderentryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.xiao5.ordercenter.dataorder.entity.Orderentries;
 
 import javax.annotation.Resource;
 import java.util.List;
