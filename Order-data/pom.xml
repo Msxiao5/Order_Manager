@@ -67,7 +67,11 @@
             <version>2.8.0</version>
         </dependency>
         <!-- swagger end -->
-
+        <dependency>
+            <groupId>com.xiao5</groupId>
+            <artifactId>Order-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

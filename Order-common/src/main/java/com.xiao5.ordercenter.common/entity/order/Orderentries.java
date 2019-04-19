@@ -1,4 +1,4 @@
-package com.xiao5.ordercenter.dataorder.entity;
+package com.xiao5.ordercenter.common.entity.order;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;

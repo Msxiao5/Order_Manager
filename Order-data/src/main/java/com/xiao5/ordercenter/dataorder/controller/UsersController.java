@@ -1,9 +1,8 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
-import com.xiao5.ordercenter.dataorder.entity.Users;
+import com.xiao5.ordercenter.common.entity.user.Users;
 import com.xiao5.ordercenter.dataorder.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +30,7 @@ public class UsersController {
      * @author Wu TianBing
      * @date 2019/3/21 17:12
      * @param  id 用户Id
-     * @return com.xiao5.ordercenter.dataorder.entity.Users
+     * @return com.xiao5.ordercenter.common.entity.user.Users
      */
     @GetMapping("/qryUsersById/{id}")
     public Users qryUsersById(@PathVariable("id") Long id){

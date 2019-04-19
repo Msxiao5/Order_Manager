@@ -1,7 +1,6 @@
 package com.xiao5.ordercenter.dataorder.mapper;
 
 import com.xiao5.ordercenter.dataorder.entity.Orderentries;
-import com.xiao5.ordercenter.dataorder.service.OrderentryService;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
