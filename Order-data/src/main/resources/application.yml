@@ -8,3 +8,6 @@ spring:
     password: Abc123!_
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.xiao5.ordercenter.common.entity
