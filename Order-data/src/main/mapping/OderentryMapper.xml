@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiao5.ordercenter.dataorder.mapper.OrderentryMapper">
+
+    <sql id="Base_Column_List">
+        orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename,merchandisetype,mdseshare,accno,currency,netamount,mdsecount,brno,tellerno,mediatype,authmethod,devicecode,channelcode,channelserialno,ordersdate,orderstime,approverid,approverstatus,approverreason,crtdatetime,remark
+    </sql>
+
+    <select id="selectOrderListByCondition" parameterType="java.lang.String" resultType="java.util.List">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ORDERENTRY
+        <where>
+         1=1
+            <if test="customercode != null and customercode != ''" >
+                AND customercode = #{customercode}
+            </if>
+                <if test="customername != null and customername != ''" >
+                    AND customername like'%${customername}%'
+                </if>
+                <if test="orderentryid != null and orderentryid != ''">
+                and  orderentryid = #{orderentryid}
+                </if>
+        </where>
+    </select>
+    <select id="findAll" resultType="java.util.List">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ORDERENTRY
+    </select>
+    <select id="findByOderentryid" parameterType="java.lang.String" resultType="com.xiao5.ordercenter.common.entity.order.Orderentries">
+    select <include refid="Base_Column_List"/>
+    from ORDERENTRY where orderentryid = #{orderentryid jdbcType = VARCHAR}
+    </select>
+    <insert id="AddOrderentry" parameterType="com.xiao5.ordercenter.common.entity.order.Orderentries">
+        insert into ORDERENTRY
+        <include refid="Base_Column_List"/>
+        values (#{orderentryid,jdbcType = VARCHAR},#{customercode,jdbcType = VARCHAR},
+        #{customername,jdbcType = VARCHAR},#{custtyp,jdbcType = VARCHAR},#{merchandisecode,jdbcType = VARCHAR},#{merchandisename,
+        jdbcType = VARCHAR},#{merchandisetype,jdbcType = VARCHAR},#{mdseshare,jdbcType = VARCHAR},#{accno,jdbcType = VARCHAR},
+        #{currency,jdbcType = VARCHAR},#{netamount,jdbcType = VARCHAR},#{mdsecount,jdbcType = VARCHAR},#{brno,jdbcType = VARCHAR},
+        #{tellerno,jdbcType = VARCHAR},#{mediatype,jdbcType = VARCHAR},#{authmethod,jdbcType = VARCHAR},#{devicecode,jdbcType = VARCHAR},
+        #{channelcode,jdbcType = VARCHAR},#{channelserialno,jdbcType = VARCHAR},#{ordersdate,jdbcType = VARCHAR},#{orderstime,jdbcType = VARCHAR},
+        #{approverid,jdbcType = VARCHAR},#{approverstatus,jdbcType = VARCHAR},#{approverreason,jdbcType = VARCHAR},#{crtdatetime,jdbcType = VARCHAR},
+        #{remark,jdbcType = VARCHAR})
+    </insert>
+    <delete id="delOrderByid" parameterType="java.lang.String">
+     delete from  ORDERENTRY where orderentryid = #{orderentryid,jdbcType = VARCHAR}
+    </delete>
+
+</mapper>

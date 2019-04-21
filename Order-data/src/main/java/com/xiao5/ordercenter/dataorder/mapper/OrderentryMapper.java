@@ -38,21 +38,12 @@ public interface OrderentryMapper {
             @Result(property = "remark", column = "remark")
 
     })
-    @Select(value = "Select * from ORDERENTRY where orderentryid = #{orderentryid}")
-    Orderentries queryOrderByorderentryid(String orderentryid);
+    Orderentries findByOderentryid(String orderentryid);
 
-    @Select(value = "Select * from ORDERENTRY")
-    List<Orderentries> getOrderList();
+    List<Orderentries> findAll();
 
-    @Select(value = "Select * from ORDERENTRY where customercode = #{customercode}")
-    List<Orderentries> getOrderListbycutcd(String customercode);
+    List<Orderentries> selectOrderListByCondition(String condition);
 
-    @Insert("insert into ORDERENTRY (orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename," +
-            "merchandisetype,mdseshare,accno,currency,netamount,mdsecount,mediatype,authmethod,devicecode,channelcode," +
-            "channelserialno,ordersdate,orderstime,crtdatetime,remark) values (#{orderentryid},#{customercode}," +
-            "#{customername},#{custtyp},#{merchandisecode},#{merchandisename},#{merchandisetype},#{mdseshare}," +
-            "#{accno},#{currency},#{netamount},#{mdsecount},#{mediatype},#{authmethod},#{devicecode},#{channelcode}," +
-            "#{channelserialno},#{ordersdate},#{orderstime},#{crtdatetime},#{remark})")
-    void AddOrderentry(Orderentries orderentries);
+    int AddOrderentry(Orderentries orderentries);
 
 }

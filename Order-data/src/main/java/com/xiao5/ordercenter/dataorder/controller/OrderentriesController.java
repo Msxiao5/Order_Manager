@@ -32,7 +32,7 @@ public class OrderentriesController {
     public Orderentries get(@PathVariable("id") String orderentryid){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
-        Orderentries orderentries = orderentryService.queryOrderByorderentryid(orderentryid);
+        Orderentries orderentries = orderentryService.findByOderentryid(orderentryid);
         if (orderentries == null){
             log.info("【当前订单编号：{}，无对应订单信息】",orderentryid);
         }
@@ -46,15 +46,15 @@ public class OrderentriesController {
      * 根据客户编码，获取订单信息集合
      * @author Wu TianBing
      * @date 2019/4/18 22:26
-     * @param customercode	客户编码
+     * @param condition	查询条件
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    @GetMapping("/getlist/{customercode}")
-    public List<Orderentries> getList(@PathVariable("customercode") String customercode){
+    @GetMapping("/getlist/{condition}")
+    public List<Orderentries> getList(@PathVariable("condition") String condition){
         long startTimeMillis = System.currentTimeMillis();
-        List<Orderentries> orderentries = orderentryService.showOrderListbycutcd(customercode);
+        List<Orderentries> orderentries = orderentryService.selectOrderListByCondition(condition);
         if (CollectionUtils.isEmpty(orderentries)){
-            log.info("【当前客户编码：{}，无对应订单信息】",customercode);
+            log.info("【当前客户编码：{}，无对应订单信息】",condition);
         }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
@@ -72,7 +72,7 @@ public class OrderentriesController {
     @GetMapping("/getAll")
     public List<Orderentries> getAll(){
         long startTimeMillis = System.currentTimeMillis();
-        List<Orderentries> orderentries = orderentryService.showOrderList();
+        List<Orderentries> orderentries = orderentryService.fiadAll();
         if (CollectionUtils.isEmpty(orderentries)){
             log.info("【当前无对应订单信息】");
         }

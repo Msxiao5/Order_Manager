@@ -32,23 +32,23 @@ public class OrderentryService {
      * @param orderentryid	订单编号
      * @return com.xiao5.ordercenter.dataorder.entity.Orderentries
      */
-    public Orderentries queryOrderByorderentryid(String orderentryid) {
+    public Orderentries findByOderentryid(String orderentryid) {
         log.info("【根据订单号查询订单详细信息】", orderentryid);
-        Orderentries orderentries = orderentryMapper.queryOrderByorderentryid(orderentryid);
+        Orderentries orderentries = orderentryMapper.findByOderentryid(orderentryid);
         log.info("当前订单号orderentryid = {},查询结果为:{}", orderentryid, orderentries.toString());
         return orderentries;
     }
 
     /**
-     *  根据客户号查询订单列表
+     *  根据条件查询订单列表
      * @author Wu TianBing
      * @date 2019/4/18 22:35
-     * @param customercode	客户编码
+     * @param condition	查询条件，条件包含custmoercode，custmoername,custmoercode and custmoername,"",由web端传参决定
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    public List<Orderentries> showOrderListbycutcd(String customercode) {
-        log.info("【根据客户号查询订单列表】", customercode);
-        return orderentryMapper.getOrderListbycutcd(customercode);
+    public List<Orderentries> selectOrderListByCondition(String condition) {
+        log.info("【根据条件查询订单列表】", condition);
+        return orderentryMapper.selectOrderListByCondition(condition);
     }
 
     /**
@@ -58,8 +58,8 @@ public class OrderentryService {
      * @param
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    public List<Orderentries> showOrderList() {
-        return orderentryMapper.getOrderList();
+    public List<Orderentries> fiadAll() {
+        return orderentryMapper.findAll();
     }
 
     /**
