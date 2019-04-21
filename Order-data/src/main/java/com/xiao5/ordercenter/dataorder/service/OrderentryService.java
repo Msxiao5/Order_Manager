@@ -26,11 +26,12 @@ public class OrderentryService {
     OrderentryMapper orderentryMapper;
 
     /**
-     *  根据订单号查询订单信息
+     * 根据订单号查询订单信息
+     *
+     * @param orderentryid 订单编号
+     * @return com.xiao5.ordercenter.dataorder.entity.Orderentries
      * @author Wu TianBing
      * @date 2019/4/18 22:36
-     * @param orderentryid	订单编号
-     * @return com.xiao5.ordercenter.dataorder.entity.Orderentries
      */
     public Orderentries findByOderentryid(String orderentryid) {
         log.info("【根据订单号查询订单详细信息】", orderentryid);
@@ -40,34 +41,37 @@ public class OrderentryService {
     }
 
     /**
-     *  根据条件查询订单列表
+     * 根据条件查询订单列表
+     *
+     * @param custmoercode，custmoername,orderentryid
+     * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      * @author Wu TianBing
      * @date 2019/4/18 22:35
-     * @param condition	查询条件，条件包含custmoercode，custmoername,custmoercode and custmoername,"",由web端传参决定
-     * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    public List<Orderentries> selectOrderListByCondition(String condition) {
-        log.info("【根据条件查询订单列表】", condition);
-        return orderentryMapper.selectOrderListByCondition(condition);
+    public List<Orderentries> selectOrderListByCondition(String orderentryid, String custmoercode, String custmoername) {
+        log.info("【根据条件查询订单列表】", "orderentryid :" + orderentryid + "\n" + "custmoercode :" + custmoercode + "\n" + "custmoername :" + custmoername);
+        return orderentryMapper.selectOrderListByCondition(orderentryid, custmoercode, custmoername);
     }
 
     /**
-     *  初始化查询订单列表
-     * @author Wu TianBing
-     * @date 2019/4/18 22:35
+     * 初始化查询订单列表
+     *
      * @param
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
+     * @author Wu TianBing
+     * @date 2019/4/18 22:35
      */
     public List<Orderentries> fiadAll() {
         return orderentryMapper.findAll();
     }
 
     /**
-     *  录入一条订单
+     * 录入一条订单
+     *
+     * @param orderentries 订单信息对象
+     * @return java.lang.Integer
      * @author Wu TianBing
      * @date 2019/4/18 22:35
-     * @param orderentries	订单信息对象
-     * @return java.lang.Integer
      */
     public Integer AddOrderentry(Orderentries orderentries) {
         String orderentryid = OrderCodeFactory.getOrderCodeByAtomic();
@@ -79,7 +83,7 @@ public class OrderentryService {
 
             count++;
             return count;
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
 

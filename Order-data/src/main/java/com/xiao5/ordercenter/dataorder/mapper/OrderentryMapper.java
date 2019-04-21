@@ -42,7 +42,7 @@ public interface OrderentryMapper {
 
     List<Orderentries> findAll();
 
-    List<Orderentries> selectOrderListByCondition(String condition);
+    List<Orderentries> selectOrderListByCondition(String orderentryid, String custmoercode, String condition);
 
     int AddOrderentry(Orderentries orderentries);
 
