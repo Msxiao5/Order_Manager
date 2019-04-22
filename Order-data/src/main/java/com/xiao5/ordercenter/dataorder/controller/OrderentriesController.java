@@ -3,11 +3,14 @@ package com.xiao5.ordercenter.dataorder.controller;
 import com.xiao5.ordercenter.common.entity.order.Orderentries;
 import com.xiao5.ordercenter.dataorder.service.OrderentryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：订单信息controller
@@ -18,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/orderentry")
 public class OrderentriesController {
-    @Resource
+    @Autowired
     OrderentryService orderentryService;
 
     /**
@@ -46,15 +49,25 @@ public class OrderentriesController {
      * 根据客户编码，获取订单信息集合
      * @author Wu TianBing
      * @date 2019/4/18 22:26
-     * @param condition	查询条件
+     * @param orderentryid, custmoercode, custmoername	查询条件
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    @GetMapping("/getlist/{condition}")
-    public List<Orderentries> getList(@PathVariable("condition") String condition){
+    @GetMapping("/getlist/{conditionMap}")
+    public List<Orderentries> getList(@PathVariable("conditionMap") String orderentryid,String custmoercode,String custmoername  ){
         long startTimeMillis = System.currentTimeMillis();
-        List<Orderentries> orderentries = orderentryService.selectOrderListByCondition(condition);
+        Map<String,String> conditionMap = new HashMap<String,String>();
+        if (orderentryid != null){
+            conditionMap.put("orderentryid",orderentryid);
+        }
+        if (custmoercode != null){
+            conditionMap.put("custmoercode",custmoercode);
+        }
+        if (custmoername != null){
+            conditionMap.put("custmoername",custmoername);
+        }
+        List<Orderentries> orderentries = orderentryService.selectOrderListByCondition(conditionMap);
         if (CollectionUtils.isEmpty(orderentries)){
-            log.info("【当前客户编码：{}，无对应订单信息】",condition);
+            log.info("【当前客户编码：{}，无对应订单信息】",conditionMap);
         }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
@@ -72,7 +85,7 @@ public class OrderentriesController {
     @GetMapping("/getAll")
     public List<Orderentries> getAll(){
         long startTimeMillis = System.currentTimeMillis();
-        List<Orderentries> orderentries = orderentryService.fiadAll();
+        List<Orderentries> orderentries = orderentryService.findAll();
         if (CollectionUtils.isEmpty(orderentries)){
             log.info("【当前无对应订单信息】");
         }

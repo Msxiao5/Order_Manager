@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：mmzs
@@ -43,14 +45,15 @@ public class OrderentryService {
     /**
      * 根据条件查询订单列表
      *
-     * @param custmoercode，custmoername,orderentryid
+     * @param  conditionMap
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      * @author Wu TianBing
      * @date 2019/4/18 22:35
      */
-    public List<Orderentries> selectOrderListByCondition(String orderentryid, String custmoercode, String custmoername) {
-        log.info("【根据条件查询订单列表】", "orderentryid :" + orderentryid + "\n" + "custmoercode :" + custmoercode + "\n" + "custmoername :" + custmoername);
-        return orderentryMapper.selectOrderListByCondition(orderentryid, custmoercode, custmoername);
+    public List<Orderentries> selectOrderListByCondition(Map<String,String> conditionMap) {
+
+        log.info("【根据条件查询订单列表】", conditionMap);
+        return orderentryMapper.selectOrderListByCondition(conditionMap);
     }
 
     /**
@@ -61,7 +64,7 @@ public class OrderentryService {
      * @author Wu TianBing
      * @date 2019/4/18 22:35
      */
-    public List<Orderentries> fiadAll() {
+    public List<Orderentries> findAll() {
         return orderentryMapper.findAll();
     }
 

@@ -4,6 +4,7 @@ import com.xiao5.ordercenter.common.entity.order.Orderentries;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：mmzs
@@ -42,7 +43,7 @@ public interface OrderentryMapper {
 
     List<Orderentries> findAll();
 
-    List<Orderentries> selectOrderListByCondition(String orderentryid, String custmoercode, String condition);
+    List<Orderentries> selectOrderListByCondition(Map<String,String> conditionMap);
 
     int AddOrderentry(Orderentries orderentries);
 
