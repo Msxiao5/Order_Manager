@@ -8,12 +8,11 @@
         orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename,merchandisetype,mdseshare,accno,currency,netamount,mdsecount,brno,tellerno,mediatype,authmethod,devicecode,channelcode,channelserialno,ordersdate,orderstime,approverid,approverstatus,approverreason,crtdatetime,remark
     </sql>
     
-    <select id="selectOrderListByCondition" parameterType="com.xiao5.ordercenter.common.entity.order.Orderentries" resultType="java.util.List">
+    <select id="selectOrderListByCondition" parameterType="com.xiao5.ordercenter.common.entity.order.Orderentries" resultType="List">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ORDERENTRY
         <where>
-         1=1
             <if test="customercode != null and customercode != ''" >
                 AND customercode = #{customercode}
             </if>
@@ -25,7 +24,7 @@
                 </if>
         </where>
     </select>
-    <select id="findAll" resultType="java.util.List" resultMap="Orderentrymap">
+    <select id="findAll" resultType="List" resultMap="Orderentrymap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ORDERENTRY

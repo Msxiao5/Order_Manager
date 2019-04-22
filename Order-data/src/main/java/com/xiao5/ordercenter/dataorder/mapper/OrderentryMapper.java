@@ -43,7 +43,7 @@ public interface OrderentryMapper {
 
     List<Orderentries> findAll();
 
-    List<Orderentries> selectOrderListByCondition(Map<String,String> conditionMap);
+    List<Orderentries> selectOrderListByCondition(Orderentries orderentries);
 
     int AddOrderentry(Orderentries orderentries);
 

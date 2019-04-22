@@ -45,15 +45,14 @@ public class OrderentryService {
     /**
      * 根据条件查询订单列表
      *
-     * @param  conditionMap
+     * @param  orderentries
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      * @author Wu TianBing
      * @date 2019/4/18 22:35
      */
-    public List<Orderentries> selectOrderListByCondition(Map<String,String> conditionMap) {
-
-        log.info("【根据条件查询订单列表】", conditionMap);
-        return orderentryMapper.selectOrderListByCondition(conditionMap);
+    public List<Orderentries> selectOrderListByCondition(Orderentries orderentries) {
+        log.info("【根据条件查询订单列表】", orderentries);
+        return orderentryMapper.selectOrderListByCondition(orderentries);
     }
 
     /**
