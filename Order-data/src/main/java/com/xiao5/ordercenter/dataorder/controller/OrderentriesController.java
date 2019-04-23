@@ -49,30 +49,20 @@ public class OrderentriesController {
      * 根据客户编码，获取订单信息集合
      * @author Wu TianBing
      * @date 2019/4/18 22:26
-     * @param orderentryid, custmoercode, custmoername	查询条件
+     * @param orderentries orderentryid, custmoercode, custmoername	查询条件
      * @return java.util.List<com.xiao5.ordercenter.dataorder.entity.Orderentries>
      */
-    @GetMapping("/getlist/{conditionMap}")
-    public List<Orderentries> getList(@PathVariable("conditionMap") String orderentryid,String custmoercode,String custmoername  ){
+    @GetMapping("/getlist/{orderentries}")
+    public List<Orderentries> getList(@PathVariable("orderentries") Orderentries orderentries  ){
         long startTimeMillis = System.currentTimeMillis();
-        Map<String,String> conditionMap = new HashMap<String,String>();
-        if (orderentryid != null){
-            conditionMap.put("orderentryid",orderentryid);
-        }
-        if (custmoercode != null){
-            conditionMap.put("custmoercode",custmoercode);
-        }
-        if (custmoername != null){
-            conditionMap.put("custmoername",custmoername);
-        }
-        List<Orderentries> orderentries = orderentryService.selectOrderListByCondition(conditionMap);
-        if (CollectionUtils.isEmpty(orderentries)){
-            log.info("【当前客户编码：{}，无对应订单信息】",conditionMap);
+        List<Orderentries> orderResult = orderentryService.selectOrderListByCondition(orderentries);
+        if (CollectionUtils.isEmpty(orderResult)){
+            log.info("【当前客户编码：{}，无对应订单信息】",orderentries);
         }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return orderentries;
+        return orderResult;
     }
 
     /**
