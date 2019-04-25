@@ -9,5 +9,5 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
-  mapper-locations: classpath:mapping/*Mapper.xml
+  mapper-locations: classpath:com/xiao5/ordercenter/dataorder/mapper/*.xml
   type-aliases-package: com.xiao5.ordercenter.common.entity
