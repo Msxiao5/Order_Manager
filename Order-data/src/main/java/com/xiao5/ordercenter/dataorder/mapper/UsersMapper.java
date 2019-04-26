@@ -1,8 +1,7 @@
 package com.xiao5.ordercenter.dataorder.mapper;
 
 import com.xiao5.ordercenter.common.entity.user.Users;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * 用户Mapper
@@ -22,5 +21,8 @@ public interface UsersMapper {
      */
     @Select("Select * from USERS where id = #{id}")
     Users qryUsersById(Long id);
-
+    @Insert("insert into USERS (name,password,age,remark,status) values (#{name},#{password},#{age},#{remark},#{status});")
+    Users saveUser(Users users);
+    @Delete("delete from USERS where id = #{id}")
+    void deleteUser(Long id);
 }
