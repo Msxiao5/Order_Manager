@@ -2,34 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.xiao5.ordercenter.dataorder.mapper.OrderentryMapper">
-    <resultMap id="com.xiao5.ordercenter.common.entity.order.Orderentries" type="Orderentrymap"/>
+    <resultMap id="OrderResultMap" type="com.xiao5.ordercenter.dataorder.mapper.OrderentryMapper"/>
 
     <sql id="Base_Column_List">
         orderentryid,customercode,customername,custtyp,merchandisecode,merchandisename,merchandisetype,mdseshare,accno,currency,netamount,mdsecount,brno,tellerno,mediatype,authmethod,devicecode,channelcode,channelserialno,ordersdate,orderstime,approverid,approverstatus,approverreason,crtdatetime,remark
     </sql>
     
-    <select id="selectOrderListByCondition" parameterType="com.xiao5.ordercenter.common.entity.order.Orderentries" resultType="List">
+    <select id="getList" parameterType="com.xiao5.ordercenter.common.entity.order.Orderentries" resultType="com.xiao5.ordercenter.common.entity.order.Orderentries">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ORDERENTRY
         <where>
-            <if test="customercode != null and customercode != ''" >
+        1=1
+            <if test="OrderQueryParam.customercode != null and OrderQueryParam.customercode != ''" >
                 AND customercode = #{customercode}
             </if>
-                <if test="customername != null and customername != ''" >
+                <if test="OrderQueryParam.customername != null and OrderQueryParam.customername != ''" >
                     AND customername like'%${customername}%'
                 </if>
-                <if test="orderentryid != null and orderentryid != ''">
+                <if test="OrderQueryParam.orderentryid != null and OrderQueryParam.orderentryid != ''">
                 and  orderentryid = #{orderentryid}
+                </if>
+                <if test="OrderQueryParam.ordersdate !=null and OrderQueryParam.ordersdate !=''">
+                and ordersdate = #{ordersdate}
+                </if>
+                <if test="OrderQueryParam.ordersstdate != null and OrderQueryParam.ordersstdate !=''">
+                    and ordersstdate &gt;= #{ordersstdate}
+                </if>
+                <if test="OrderQueryParam.ordersenddate != null and OrderQueryParam.ordersenddate != ''">
+                    and ordersenddate &lt;= #{ordersenddate}
                 </if>
         </where>
     </select>
-    <select id="findAll" resultType="List" resultMap="Orderentrymap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM ORDERENTRY
-    </select>
-    <select id="findByOderentryid" parameterType="java.lang.String" resultType="com.xiao5.ordercenter.common.entity.order.Orderentries">
+    <select id="getOrderDetail" parameterType="java.lang.String" resultType="com.xiao5.ordercenter.common.entity.order.Orderentries">
     select <include refid="Base_Column_List"/>
     from ORDERENTRY where orderentryid = #{orderentryid jdbcType = VARCHAR}
     </select>
@@ -45,7 +50,7 @@
         #{approverid,jdbcType = VARCHAR},#{approverstatus,jdbcType = VARCHAR},#{approverreason,jdbcType = VARCHAR},#{crtdatetime,jdbcType = VARCHAR},
         #{remark,jdbcType = VARCHAR})
     </insert>
-    <delete id="delOrderByid" parameterType="java.lang.String">
+    <delete id="delOrder" parameterType="java.lang.String">
      delete from  ORDERENTRY where orderentryid = #{orderentryid,jdbcType = VARCHAR}
     </delete>
 

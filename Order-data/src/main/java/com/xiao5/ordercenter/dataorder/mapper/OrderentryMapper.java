@@ -1,7 +1,9 @@
 package com.xiao5.ordercenter.dataorder.mapper;
 
 import com.xiao5.ordercenter.common.entity.order.Orderentries;
+import com.xiao5.ordercenter.dataorder.dto.OrderQueryParam;
 import org.apache.ibatis.annotations.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,36 +17,30 @@ import java.util.Map;
  */
 @Mapper
 public interface OrderentryMapper {
-    @Results({
-            @Result(property = "orderentryid", column = "orderentryid"),
-            @Result(property = "customercode", column = "customercode"),
-            @Result(property = "customername", column = "customername"),
-            @Result(property = "custtyp", column = "custtyp"),
-            @Result(property = "merchandisecode", column = "merchandisecode"),
-            @Result(property = "merchandisename", column = "merchandisename"),
-            @Result(property = "merchandisetype", column = "merchandisetype"),
-            @Result(property = "mdseshare", column = "mdseshare"),
-            @Result(property = "accno", column = "accno"),
-            @Result(property = "currency", column = "currency"),
-            @Result(property = "netamount", column = "netamount"),
-            @Result(property = "mdsecount", column = "mdsecount"),
-            @Result(property = "mediatype", column = "mediatype"),
-            @Result(property = "authmethod", column = "authmethod"),
-            @Result(property = "devicecode", column = "devicecode"),
-            @Result(property = "channelcode", column = "channelcode"),
-            @Result(property = "channelserialno", column = "channelserialno"),
-            @Result(property = "ordersdate", column = "ordersdate"),
-            @Result(property = "orderstime", column = "orderstime"),
-            @Result(property = "crtdatetime", column = "crtdatetime"),
-            @Result(property = "remark", column = "remark")
+    /**
+     * 条件查询
+     * @param queryParam
+     * @return
+     */
+    List<Orderentries> getList(@Param("queryParam")OrderQueryParam queryParam,Integer pageSize,Integer pageNum);
+    /**
+     * 根据订单编号查询订单信息
+     */
+    Orderentries getOrderDetail(String orderentryid);
 
-    })
-    Orderentries findByOderentryid(String orderentryid);
-
-    List<Orderentries> findAll();
-
-    List<Orderentries> selectOrderListByCondition(Orderentries orderentries);
-
+    /**
+     * 生成订单
+     * @param orderentries
+     * @return java.lang.Interger
+     */
     int AddOrderentry(Orderentries orderentries);
+
+    /**
+     * 批量删除订单
+     * @param orderentryid
+     * @return java.lang.Interger
+     */
+    @Transactional
+    int delOrder(String orderentryid);
 
 }
