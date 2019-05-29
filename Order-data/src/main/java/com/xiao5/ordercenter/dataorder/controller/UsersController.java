@@ -1,7 +1,7 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
 import com.xiao5.ordercenter.common.entity.user.Users;
-import com.xiao5.ordercenter.dataorder.service.UsersService;
+import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 public class UsersController {
 
     @Resource
-    UsersService usersService;
+    IUsersService usersService;
 
     /**
      * 根据用户Id查询用户信息

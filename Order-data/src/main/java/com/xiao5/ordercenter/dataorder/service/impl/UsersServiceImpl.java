@@ -1,7 +1,8 @@
-package com.xiao5.ordercenter.dataorder.service;
+package com.xiao5.ordercenter.dataorder.service.impl;
 
 import com.xiao5.ordercenter.common.entity.user.Users;
 import com.xiao5.ordercenter.dataorder.mapper.UsersMapper;
+import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @Service
-public class UsersService {
+public class UsersServiceImpl implements IUsersService {
 
     @Resource
     UsersMapper usersMapper;
@@ -27,6 +28,7 @@ public class UsersService {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
+    @Override
     public Users qryUsersById(Integer id) {
         log.info("【根据Id查询当前用户，当前Id={}】",id);
         Users users = usersMapper.qryUsersById(id);
