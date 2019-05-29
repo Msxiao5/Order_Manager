@@ -1,5 +1,6 @@
 package com.xiao5.ordercenter.dataorder.service.impl;
 
+import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
 import com.xiao5.ordercenter.dataorder.mapper.UsersMapper;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
@@ -29,10 +30,48 @@ public class UsersServiceImpl implements IUsersService {
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
     @Override
-    public Users qryUsersById(Integer id) {
+    public NetResponse<Users> qryUsersById(Integer id) {
+        NetResponse<Users> response = new NetResponse<>();
         log.info("【根据Id查询当前用户，当前Id={}】",id);
         Users users = usersMapper.qryUsersById(id);
         log.info("【当前Id = {},查询用户结果为：{}】",id ,users.toString());
-        return users;
+        response.setResult(users);
+        return response;
+    }
+
+    /**
+     * 添加用户
+     * @author Wu Tianbing
+     * @date 2019-05-29 16:22
+     * @param users 用户信息
+     * @return int
+     */
+    @Override
+    public int saveUser(Users users) {
+        log.info("【添加用户，当前Id={}】", users.getId());
+        int count = usersMapper.saveUser(users);
+        if (count <= 0 ){
+            log.error("保存用户失败");
+        }
+        log.info("【当前Id = {},添加用户成功，用户信息为：{}】",users.getId() ,users.toString());
+        return count;
+    }
+
+    /**
+     * 根据用户ID 删除用户
+     * @author Wu Tianbing
+     * @date 2019-05-29 16:31
+     * @param id 用户ID
+     * @return int
+     */
+    @Override
+    public int deleteUser(Integer id) {
+        log.info("【根据用户ID 删除用户，当前Id={}】", id);
+        int count = usersMapper.deleteUser(id);
+        if (count <= 0 ){
+            log.error("保存用户失败");
+        }
+        log.info("【当前Id = {},删除用户成功，用户信息为：{}】",id);
+        return count;
     }
 }

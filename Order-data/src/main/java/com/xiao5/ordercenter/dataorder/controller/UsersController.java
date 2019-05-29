@@ -1,12 +1,11 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
+import com.xiao5.ordercenter.common.entity.NetRequest;
+import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -32,18 +31,74 @@ public class UsersController {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
-    @GetMapping("/qryUsersById/{id}")
-    public Users qryUsersById(@PathVariable("id") Integer id){
+    @GetMapping("/qry/{id}")
+    public NetResponse<Users> qryUsersById(@PathVariable("id") Integer id){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
-        Users users = usersService.qryUsersById(id);
-        if (null == users){
+        NetResponse<Users> netResponse = usersService.qryUsersById(id);
+        if (null == netResponse.getResult()){
             log.info("【当前{}ID，无对应用户】",id);
+            netResponse.setCode("9999");
+            netResponse.setMassage("查询用户不存在");
+            return netResponse;
         }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return users;
+        return netResponse;
     }
+
+    /**
+     * 保存用户
+     * @author Wu Tianbing
+     * @date 2019-05-29 16:48
+     * @param request	请求对象
+     * @return com.xiao5.ordercenter.common.entity.NetResponse
+     */
+    @PostMapping("/add")
+    public NetResponse saveUser(@RequestBody NetRequest<Users> request){
+        NetResponse netResponse = new NetResponse();
+        //调用开始时间
+        long startTimeMillis = System.currentTimeMillis();
+
+        Users users = request.getRequest();
+        int count = usersService.saveUser(users);
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",users.getId());
+            netResponse.setCode("9999");
+            netResponse.setMassage("保存用户失败");
+            return netResponse;
+        }
+        //耗时
+        long timeConsuming = System.currentTimeMillis() - startTimeMillis;
+        log.info("【时长:{}毫秒】", timeConsuming);
+        return netResponse;
+    }
+    /**
+     * 根据用户ID 删除用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:05
+     * @param id	用户ID
+     * @return com.xiao5.ordercenter.common.entity.NetResponse
+     */
+    @GetMapping("/delete/{id}")
+    public NetResponse deleteUser(@PathVariable("id") Integer id){
+        NetResponse netResponse = new NetResponse();
+        //调用开始时间
+        long startTimeMillis = System.currentTimeMillis();
+
+        int count = usersService.deleteUser(id);
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",id);
+            netResponse.setCode("9999");
+            netResponse.setMassage("删除用户失败");
+            return netResponse;
+        }
+        //耗时
+        long timeConsuming = System.currentTimeMillis() - startTimeMillis;
+        log.info("【时长:{}毫秒】", timeConsuming);
+        return netResponse;
+    }
+
 }

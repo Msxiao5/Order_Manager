@@ -1,5 +1,6 @@
 package com.xiao5.ordercenter.dataorder.service;
 
+import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
 
 public interface IUsersService {
@@ -11,7 +12,25 @@ public interface IUsersService {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
-    Users qryUsersById(Integer id);
+    NetResponse<Users> qryUsersById(Integer id);
+
+    /**
+     * 添加用户
+     * @author Wu Tianbing
+     * @date 2019-05-29 16:22
+     * @param users 用户信息
+     * @return int
+     */
+    int saveUser(Users users);
+
+    /**
+     * 根据用户ID 删除用户
+     * @author Wu Tianbing
+     * @date 2019-05-29 16:31
+     * @param id 用户ID
+     * @return int
+     */
+    int deleteUser(Integer id);
 
 
 }

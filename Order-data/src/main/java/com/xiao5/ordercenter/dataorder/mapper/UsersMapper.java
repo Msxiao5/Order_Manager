@@ -21,9 +21,9 @@ public interface UsersMapper {
      */
     Users qryUsersById(@Param(value = "id") Integer id);
 
-    @Insert("insert into USERS (name,password,age,remark,status) values (#{name},#{password},#{age},#{remark},#{status});")
-    Users saveUser(Users users);
+    @Insert("insert into USERS (id,name,password,age,remark,status) values (#{id},#{name},#{passWord},#{age},#{remark},#{status});")
+    int saveUser(Users users);
 
     @Delete("delete from USERS where id = #{id}")
-    void deleteUser(Integer id);
+    int deleteUser(Integer id);
 }
