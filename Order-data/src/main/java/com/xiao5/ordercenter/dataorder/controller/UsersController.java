@@ -101,4 +101,31 @@ public class UsersController {
         return netResponse;
     }
 
+    /**
+     * 修改用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:35
+     * @param request	用户信息
+     * @return com.xiao5.ordercenter.common.entity.NetResponse
+     */
+    @PostMapping("/update")
+    public NetResponse updateUser(@RequestBody NetRequest<Users> request){
+        NetResponse netResponse = new NetResponse();
+        //调用开始时间
+        long startTimeMillis = System.currentTimeMillis();
+
+        Users users = request.getRequest();
+        int count = usersService.updateUser(users);
+        if (count <= 0){
+            log.info("【当前{}ID，修改用户失败】",users.getId());
+            netResponse.setCode("9999");
+            netResponse.setMassage("修改用户失败");
+            return netResponse;
+        }
+        //耗时
+        long timeConsuming = System.currentTimeMillis() - startTimeMillis;
+        log.info("【时长:{}毫秒】", timeConsuming);
+        return netResponse;
+    }
+
 }

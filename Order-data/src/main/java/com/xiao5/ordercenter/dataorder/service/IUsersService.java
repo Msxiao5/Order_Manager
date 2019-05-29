@@ -32,5 +32,12 @@ public interface IUsersService {
      */
     int deleteUser(Integer id);
 
-
+    /**
+     * 修改用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:34
+     * @param users	 用户信息
+     * @return int
+     */
+    int updateUser(Users users);
 }

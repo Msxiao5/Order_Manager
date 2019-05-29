@@ -74,4 +74,25 @@
         WHERE id = #{id,jdbcType = INTEGER}
     </delete>
 
+    <update id="updateUser" parameterType="com.xiao5.ordercenter.common.entity.user.Users">
+        UPDATE USERS
+        <set>
+            <if test="name != null">
+                name =  #{ name,jdbcType = VARCHAR },
+            </if>
+            <if test="passWord != null">
+                passWord = #{ passWord,jdbcType = VARCHAR },
+            </if>
+            <if test="age != null">
+                age =  #{ age,jdbcType = VARCHAR },
+            </if>
+            <if test="remark != null">
+                remark =  #{ remark,jdbcType = VARCHAR },
+            </if>
+            <if test="status != null">
+                status =  #{ status,jdbcType = VARCHAR },
+            </if>
+        </set>
+        WHERE id = #{ id, jdbcType = INTEGER }
+    </update>
 </mapper>

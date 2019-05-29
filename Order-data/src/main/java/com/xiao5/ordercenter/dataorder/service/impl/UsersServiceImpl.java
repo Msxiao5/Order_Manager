@@ -71,7 +71,25 @@ public class UsersServiceImpl implements IUsersService {
         if (count <= 0 ){
             log.error("保存用户失败");
         }
-        log.info("【当前Id = {},删除用户成功，用户信息为：{}】",id);
+        log.info("【当前Id = {},删除用户成功=】",id);
+        return count;
+    }
+
+    /**
+     * 修改用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:34
+     * @param users	 用户信息
+     * @return int
+     */
+    @Override
+    public int updateUser(Users users) {
+        log.info("【修改用户，当前Id={}】", users.getId());
+        int count = usersMapper.updateUser(users);
+        if (count <= 0 ){
+            log.error("保存用户失败");
+        }
+        log.info("【修改用户成功，用户信息为：{}】",users.toString());
         return count;
     }
 }
