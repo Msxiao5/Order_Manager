@@ -1,6 +1,5 @@
 package com.xiao5.ordercenter.common.entity.user;
 
-import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,24 +16,23 @@ import java.io.Serializable;
  * @date 2019/3/20 16:01
  **/
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "用户实体")
-@Table(name = "USERS")
+@AllArgsConstructor
 @Accessors(chain = true)
+@Table(name = "USERS")
 @Entity
 public class Users implements Serializable{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "passWord")
-    private String passWord;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "age")
     private String age;

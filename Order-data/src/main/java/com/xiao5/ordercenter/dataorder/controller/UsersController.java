@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 用户controller
@@ -122,6 +124,25 @@ public class UsersController {
             netResponse.setMassage("修改用户失败");
             return netResponse;
         }
+        //耗时
+        long timeConsuming = System.currentTimeMillis() - startTimeMillis;
+        log.info("【时长:{}毫秒】", timeConsuming);
+        return netResponse;
+    }
+
+    /**
+     * 使用JPA查询所有数据
+     * @author Wu Tianbing
+     * @date 2019-05-29 20:52
+     * @param
+     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
+     */
+    @GetMapping("/findAll")
+    public NetResponse<List<Users>> select(){
+        //调用开始时间
+        long startTimeMillis = System.currentTimeMillis();
+
+        NetResponse<List<Users>> netResponse = usersService.findAll();
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);

@@ -3,6 +3,8 @@ package com.xiao5.ordercenter.dataorder.service;
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
 
+import java.util.List;
+
 public interface IUsersService {
 
     /**
@@ -40,4 +42,13 @@ public interface IUsersService {
      * @return int
      */
     int updateUser(Users users);
+
+    /**
+     * 使用JPA查询所有数据
+     * @author Wu Tianbing
+     * @date 2019-05-29 20:52
+     * @param
+     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
+     */
+    NetResponse<List<Users>> findAll();
 }

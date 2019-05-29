@@ -8,6 +8,14 @@ spring:
     password: Abc123!_
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+# JPA 相关配置信息
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# mybatis 相关配置信息
 mybatis:
   type-aliases-package: com.xiao5.ordercenter.common.entity
   mapper-locations: classpath:mapper/*.xml
+
