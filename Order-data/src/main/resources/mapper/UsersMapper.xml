@@ -4,7 +4,7 @@
     <resultMap id="UserMap" type="com.xiao5.ordercenter.common.entity.user.Users">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="name" property="name" jdbcType="VARCHAR" />
-        <result column="PASSWORD" property="passWord" jdbcType="VARCHAR" />
+        <result column="password" property="passWord" jdbcType="VARCHAR" />
         <result column="age" property="age" jdbcType="VARCHAR" />
         <result column="remark" property="remark" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="VARCHAR" />
@@ -23,7 +23,55 @@
                 id = #{id,jdbcType=INTEGER}
             </if>
         </where>
-
     </select>
+
+    <insert id="saveUser" parameterType="com.xiao5.ordercenter.common.entity.user.Users">
+        INSERT INTO USERS
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="passWord != null">
+                passWord,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{ id,jdbcType = INTEGER },
+            </if>
+            <if test="name != null">
+                #{ name,jdbcType = VARCHAR },
+            </if>
+            <if test="passWord != null">
+                #{ passWord,jdbcType = VARCHAR },
+            </if>
+            <if test="age != null">
+                #{ age,jdbcType = VARCHAR },
+            </if>
+            <if test="remark != null">
+                #{ remark,jdbcType = VARCHAR },
+            </if>
+            <if test="status != null">
+                #{ status,jdbcType = VARCHAR },
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        DELETE FROM USERS
+        WHERE id = #{id,jdbcType = INTEGER}
+    </delete>
 
 </mapper>

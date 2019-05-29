@@ -21,9 +21,21 @@ public interface UsersMapper {
      */
     Users qryUsersById(@Param(value = "id") Integer id);
 
-    @Insert("insert into USERS (id,name,password,age,remark,status) values (#{id},#{name},#{passWord},#{age},#{remark},#{status});")
+    /**
+     * 保存用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:30
+     * @param users 用户信息
+     * @return int
+     */
     int saveUser(Users users);
 
-    @Delete("delete from USERS where id = #{id}")
-    int deleteUser(Integer id);
+    /**
+     * 根据用户ID 删除用户信息
+     * @author Wu Tianbing
+     * @date 2019-05-29 17:30
+     * @param id	用户ID
+     * @return int
+     */
+    int deleteUser(@Param(value = "id") Integer id);
 }
