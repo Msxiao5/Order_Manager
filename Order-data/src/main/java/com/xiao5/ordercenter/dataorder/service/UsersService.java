@@ -27,7 +27,7 @@ public class UsersService {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
-    public Users qryUsersById(Long id) {
+    public Users qryUsersById(Integer id) {
         log.info("【根据Id查询当前用户，当前Id={}】",id);
         Users users = usersMapper.qryUsersById(id);
         log.info("【当前Id = {},查询用户结果为：{}】",id ,users.toString());

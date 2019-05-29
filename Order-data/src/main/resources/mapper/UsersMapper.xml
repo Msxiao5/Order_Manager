@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiao5.ordercenter.dataorder.mapper.UsersMapper">
+    <resultMap id="UserMap" type="com.xiao5.ordercenter.common.entity.user.Users">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="passWord" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, name, PASSWORD, age, remark, status
+    </sql>
+
+    <select id="qryUsersById" resultMap="UserMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM  USERS
+        <where>
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+
+    </select>
+
+</mapper>

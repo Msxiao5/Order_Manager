@@ -33,7 +33,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
     @GetMapping("/qryUsersById/{id}")
-    public Users qryUsersById(@PathVariable("id") Long id){
+    public Users qryUsersById(@PathVariable("id") Integer id){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 

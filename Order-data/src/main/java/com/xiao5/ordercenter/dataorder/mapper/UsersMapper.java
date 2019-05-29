@@ -19,10 +19,11 @@ public interface UsersMapper {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
-    @Select("Select * from USERS where id = #{id}")
-    Users qryUsersById(Long id);
+    Users qryUsersById(@Param(value = "id") Integer id);
+
     @Insert("insert into USERS (name,password,age,remark,status) values (#{name},#{password},#{age},#{remark},#{status});")
     Users saveUser(Users users);
+
     @Delete("delete from USERS where id = #{id}")
     void deleteUser(Long id);
 }
