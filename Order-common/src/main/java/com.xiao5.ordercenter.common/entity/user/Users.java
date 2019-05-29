@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -24,9 +22,11 @@ import java.io.Serializable;
 @ApiModel(value = "用户实体")
 @Table(name = "USERS")
 @Accessors(chain = true)
+@Entity
 public class Users implements Serializable{
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Integer id;
 
