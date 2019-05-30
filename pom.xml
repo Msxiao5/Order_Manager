@@ -36,6 +36,8 @@
         <module>Order-data</module>
         <!--业务层-->
         <module>Order-service</module>
+        <!--注册中心-->
+        <module>Order-register</module>
     </modules>
 
     <dependencyManagement>
