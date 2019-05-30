@@ -8,4 +8,13 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:7005/eureka
+      defaultZone: http://localhost:7005/eureka # 注册eureka service地址
+  instance:
+    instance-id: Order-App-7004 # 重命名实力名称
+    prefer-ip-address: true # 显示IP地址
+
+info:
+  app.name: OrderCloud
+  company.name: Msxiao5
+  build.port: ${server.port}
+  build.name: ${spring.application.name}
