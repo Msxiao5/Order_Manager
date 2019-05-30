@@ -13,9 +13,15 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  application:
+    name: Order-Data
 
 # mybatis 相关配置信息
 mybatis:
   type-aliases-package: com.xiao5.ordercenter.common.entity
   mapper-locations: classpath:mapper/*.xml
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7005/eureka/
