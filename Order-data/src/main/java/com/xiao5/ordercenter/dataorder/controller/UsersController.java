@@ -1,10 +1,14 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
+import com.xiao5.ordercenter.common.code.BaseCode;
 import com.xiao5.ordercenter.common.entity.NetRequest;
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.common.enumType.exception.DataErrorEnum;
+import com.xiao5.ordercenter.common.exception.BaseException;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -38,12 +42,6 @@ public class UsersController {
         long startTimeMillis = System.currentTimeMillis();
 
         NetResponse<Users> netResponse = usersService.qryUsersById(id);
-        if (null == netResponse.getResult()){
-            log.info("【当前{}ID，无对应用户】",id);
-            netResponse.setCode("9999");
-            netResponse.setMassage("查询用户不存在");
-            return netResponse;
-        }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
@@ -59,16 +57,19 @@ public class UsersController {
      */
     @PostMapping("/add")
     public NetResponse saveUser(@RequestBody NetRequest<Users> request){
-        NetResponse netResponse = new NetResponse();
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
         Users users = request.getRequest();
-        netResponse = usersService.saveUser(users);
+        int count = usersService.saveUser(users);
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",users.getId());
+           throw new BaseException(DataErrorEnum.USER_SAVE_FOUND.getCode(),DataErrorEnum.USER_SAVE_FOUND.getDesc());
+        }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return netResponse;
+        return NetResponse.success();
     }
     /**
      * 根据用户ID 删除用户信息
@@ -79,15 +80,18 @@ public class UsersController {
      */
     @GetMapping("/delete/{id}")
     public NetResponse deleteUser(@PathVariable("id") Integer id){
-        NetResponse netResponse = new NetResponse();
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
-        netResponse = usersService.deleteUser(id);
+        int count = usersService.deleteUser(id);
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",id);
+            throw new BaseException(DataErrorEnum.USER_DEL_FOUND.getCode(), DataErrorEnum.USER_DEL_FOUND.getDesc());
+        }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return netResponse;
+        return NetResponse.success();
     }
 
     /**
@@ -99,16 +103,19 @@ public class UsersController {
      */
     @PostMapping("/update")
     public NetResponse updateUser(@RequestBody NetRequest<Users> request){
-        NetResponse netResponse = new NetResponse();
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
         Users users = request.getRequest();
-        netResponse = usersService.updateUser(users);
+        int count = usersService.updateUser(users);
+        if (count <= 0){
+            log.info("【当前{}ID，修改用户失败】",users.getId());
+            throw new BaseException(DataErrorEnum.USER_UPDATE_FOUND.getCode(), DataErrorEnum.USER_UPDATE_FOUND.getDesc());
+        }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return netResponse;
+        return NetResponse.success();
     }
 
     /**
@@ -123,11 +130,15 @@ public class UsersController {
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
-        NetResponse<List<Users>> netResponse = usersService.findAll();
+        List<Users> users = usersService.findAll();
+        if (CollectionUtils.isEmpty(users)){
+            log.error("【查询所有用户失败】");
+            throw new BaseException(DataErrorEnum.USER_FINDALL_FOUND.getCode(),DataErrorEnum.USER_FINDALL_FOUND.getDesc());
+        }
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
-        return netResponse;
+        return NetResponse.success(users);
     }
 
 }

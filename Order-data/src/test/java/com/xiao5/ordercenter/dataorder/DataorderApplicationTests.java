@@ -36,12 +36,6 @@ public class DataorderApplicationTests {
 
     @Test
     public void contextLoads() {
-        Users user = new Users(1,"张三","123321","11","weq","321sdswq");
-        NetResponse<List<Users>> serviceAll = usersService.findAll();
-        redisTemplate.opsForValue().set("Users",serviceAll);
-        NetResponse<Users> qryUsersById = usersService.qryUsersById(2);
-        redisTemplate.opsForValue().set("User2",qryUsersById);
-       // System.out.println(redisTemplate.opsForValue().get("userCache::3").toString());
     }
 
 

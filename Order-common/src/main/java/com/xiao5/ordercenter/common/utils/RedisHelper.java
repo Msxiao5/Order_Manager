@@ -54,6 +54,7 @@ public class RedisHelper {
     /** 设置值-并设置过期时间,如果存在，则忽略并返回false */
     public static boolean setNX(RedisTemplate<String, String> redis, final String hkey, final String value, final Long timeout) {
         Boolean ret = redis.execute(new RedisCallback<Boolean>() {
+            @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.setNX(hkey.getBytes(utf8), value.getBytes(utf8));
             }
@@ -76,6 +77,7 @@ public class RedisHelper {
     public static boolean sAdd(RedisTemplate<String, String> redis, final String hkey,
                                final String value) {
         Long ret = redis.execute(new RedisCallback<Long>() {
+            @Override
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.sAdd(hkey.getBytes(utf8),value.getBytes(utf8));
             }
@@ -87,6 +89,7 @@ public class RedisHelper {
     public static boolean sAdd(RedisTemplate<String, String> redis, final String hkey,
                                final String value, final Long timeout, final TimeUnit unit) {
         Long ret = redis.execute(new RedisCallback<Long>() {
+            @Override
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.sAdd(hkey.getBytes(utf8), value.getBytes(utf8));
             }
@@ -99,6 +102,7 @@ public class RedisHelper {
     /** 删除hash中某个field,不存在该field，则返回false */
     public static boolean sRem(RedisTemplate<String, String> redis, final String hkey, final String value) {
         Long ret = redis.execute(new RedisCallback<Long>() {
+            @Override
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.sRem(hkey.getBytes(utf8), value.getBytes(utf8));
             }

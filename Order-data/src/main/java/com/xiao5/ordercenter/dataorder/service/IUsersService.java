@@ -22,7 +22,7 @@ public interface IUsersService {
      * @date 2019-05-29 16:22
      * @param users 用户信息
      */
-    NetResponse saveUser(Users users);
+    int saveUser(Users users);
 
     /**
      * 根据用户ID 删除用户
@@ -30,7 +30,7 @@ public interface IUsersService {
      * @date 2019-05-29 16:31
      * @param id 用户ID
      */
-    NetResponse deleteUser(Integer id);
+    int deleteUser(Integer id);
 
     /**
      * 修改用户信息
@@ -38,7 +38,7 @@ public interface IUsersService {
      * @date 2019-05-29 17:34
      * @param users	 用户信息
      */
-    NetResponse updateUser(Users users);
+    int updateUser(Users users);
 
     /**
      * 使用JPA查询所有数据
@@ -47,5 +47,5 @@ public interface IUsersService {
      * @param
      * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
      */
-    NetResponse<List<Users>> findAll();
+    List<Users> findAll();
 }
