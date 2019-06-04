@@ -64,13 +64,7 @@ public class UsersController {
         long startTimeMillis = System.currentTimeMillis();
 
         Users users = request.getRequest();
-        int count = usersService.saveUser(users);
-        if (count <= 0){
-            log.info("【当前{}ID，保存用户失败】",users.getId());
-            netResponse.setCode("9999");
-            netResponse.setMassage("保存用户失败");
-            return netResponse;
-        }
+        netResponse = usersService.saveUser(users);
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
@@ -89,13 +83,7 @@ public class UsersController {
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
 
-        int count = usersService.deleteUser(id);
-        if (count <= 0){
-            log.info("【当前{}ID，保存用户失败】",id);
-            netResponse.setCode("9999");
-            netResponse.setMassage("删除用户失败");
-            return netResponse;
-        }
+        netResponse = usersService.deleteUser(id);
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);
@@ -116,13 +104,7 @@ public class UsersController {
         long startTimeMillis = System.currentTimeMillis();
 
         Users users = request.getRequest();
-        int count = usersService.updateUser(users);
-        if (count <= 0){
-            log.info("【当前{}ID，修改用户失败】",users.getId());
-            netResponse.setCode("9999");
-            netResponse.setMassage("修改用户失败");
-            return netResponse;
-        }
+        netResponse = usersService.updateUser(users);
         //耗时
         long timeConsuming = System.currentTimeMillis() - startTimeMillis;
         log.info("【时长:{}毫秒】", timeConsuming);

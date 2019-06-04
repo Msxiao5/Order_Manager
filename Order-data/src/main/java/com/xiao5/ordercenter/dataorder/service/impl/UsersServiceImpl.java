@@ -7,6 +7,8 @@ import com.xiao5.ordercenter.dataorder.repository.UserRepository;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
-    @Cacheable(value = "userCache", key ="#id")
+    @Cacheable(value = "Users", key ="#id")
     @Override
     public NetResponse<Users> qryUsersById(Integer id) {
         NetResponse<Users> response = new NetResponse<>();
@@ -64,15 +66,20 @@ public class UsersServiceImpl implements IUsersService {
      * @param users 用户信息
      * @return int
      */
+    @CachePut(value = "Users", key = "#users.id")
     @Override
-    public int saveUser(Users users) {
+    public NetResponse saveUser(Users users) {
+        NetResponse netResponse = new NetResponse();
         log.info("【添加用户，当前Id={}】", users.getId());
         int count = usersMapper.saveUser(users);
-        if (count <= 0 ){
-            log.error("保存用户失败");
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",users.getId());
+            netResponse.setCode("9999");
+            netResponse.setMassage("保存用户失败");
+            return netResponse;
         }
         log.info("【当前Id = {},添加用户成功，用户信息为：{}】",users.getId() ,users.toString());
-        return count;
+        return netResponse;
     }
 
     /**
@@ -82,15 +89,20 @@ public class UsersServiceImpl implements IUsersService {
      * @param id 用户ID
      * @return int
      */
+    @CacheEvict(value = "Users" , key = "#id")
     @Override
-    public int deleteUser(Integer id) {
+    public NetResponse deleteUser(Integer id) {
+        NetResponse netResponse = new NetResponse();
         log.info("【根据用户ID 删除用户，当前Id={}】", id);
         int count = usersMapper.deleteUser(id);
-        if (count <= 0 ){
-            log.error("保存用户失败");
+        if (count <= 0){
+            log.info("【当前{}ID，保存用户失败】",id);
+            netResponse.setCode("9999");
+            netResponse.setMassage("删除用户失败");
+            return netResponse;
         }
         log.info("【当前Id = {},删除用户成功=】",id);
-        return count;
+        return netResponse;
     }
 
     /**
@@ -100,15 +112,20 @@ public class UsersServiceImpl implements IUsersService {
      * @param users	 用户信息
      * @return int
      */
+    @CachePut(value = "Users", key = "#users.id")
     @Override
-    public int updateUser(Users users) {
+    public NetResponse updateUser(Users users) {
+        NetResponse netResponse = new NetResponse();
         log.info("【修改用户，当前Id={}】", users.getId());
         int count = usersMapper.updateUser(users);
-        if (count <= 0 ){
-            log.error("保存用户失败");
+        if (count <= 0){
+            log.info("【当前{}ID，修改用户失败】",users.getId());
+            netResponse.setCode("9999");
+            netResponse.setMassage("修改用户失败");
+            return netResponse;
         }
         log.info("【修改用户成功，用户信息为：{}】",users.toString());
-        return count;
+        return netResponse;
     }
 
     /**
@@ -118,7 +135,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param
      * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
      */
-    @Cacheable(value = "findAll")
+    @Cacheable(value = "Users")
     @Override
     public NetResponse<List<Users>> findAll() {
         NetResponse<List<Users>> netResponse = new NetResponse<>();

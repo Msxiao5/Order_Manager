@@ -21,27 +21,24 @@ public interface IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 16:22
      * @param users 用户信息
-     * @return int
      */
-    int saveUser(Users users);
+    NetResponse saveUser(Users users);
 
     /**
      * 根据用户ID 删除用户
      * @author Wu Tianbing
      * @date 2019-05-29 16:31
      * @param id 用户ID
-     * @return int
      */
-    int deleteUser(Integer id);
+    NetResponse deleteUser(Integer id);
 
     /**
      * 修改用户信息
      * @author Wu Tianbing
      * @date 2019-05-29 17:34
      * @param users	 用户信息
-     * @return int
      */
-    int updateUser(Users users);
+    NetResponse updateUser(Users users);
 
     /**
      * 使用JPA查询所有数据
