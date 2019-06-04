@@ -2,6 +2,8 @@ package com.xiao5.ordercenter.dataorder.service.impl;
 
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.common.utils.JsonHelper;
+import com.xiao5.ordercenter.common.utils.RedisHelper;
 import com.xiao5.ordercenter.dataorder.mapper.UsersMapper;
 import com.xiao5.ordercenter.dataorder.repository.UserRepository;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
@@ -39,7 +41,7 @@ public class UsersServiceImpl implements IUsersService {
     UserRepository userRepository;
 
     @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    RedisTemplate redisTemplate;
 
     /**
      * 根据用户Id查询用户信息
@@ -66,7 +68,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param users 用户信息
      * @return int
      */
-    @CachePut(value = "Users", key = "#users.id")
+   // @CachePut(value = "Users", key = "#users.id")
     @Override
     public NetResponse saveUser(Users users) {
         NetResponse netResponse = new NetResponse();
@@ -78,6 +80,7 @@ public class UsersServiceImpl implements IUsersService {
             netResponse.setMassage("保存用户失败");
             return netResponse;
         }
+        RedisHelper.set(redisTemplate, "Users::" + users.getId().toString(), JsonHelper.objectToJson(users));
         log.info("【当前Id = {},添加用户成功，用户信息为：{}】",users.getId() ,users.toString());
         return netResponse;
     }
@@ -89,7 +92,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param id 用户ID
      * @return int
      */
-    @CacheEvict(value = "Users" , key = "#id")
+   // @CacheEvict(value = "Users" , key = "#id")
     @Override
     public NetResponse deleteUser(Integer id) {
         NetResponse netResponse = new NetResponse();
@@ -112,7 +115,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param users	 用户信息
      * @return int
      */
-    @CachePut(value = "Users", key = "#users.id")
+   // @CachePut(value = "Users", key = "#users.id")
     @Override
     public NetResponse updateUser(Users users) {
         NetResponse netResponse = new NetResponse();

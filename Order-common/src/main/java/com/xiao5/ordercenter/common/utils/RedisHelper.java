@@ -1,532 +1,397 @@
 package com.xiao5.ordercenter.common.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @auther: Wu Tianbing
  * @date: 2019/6/3/003 11:37
  */
-@Component
 public class RedisHelper {
 
-    @Autowired
-    RedisTemplate<String,Object> redisTemplate;
+    public static final Charset utf8 = Charset.forName("utf8");
 
-    /**
-     * 指定缓存失效时间
-     * @param key	缓存key
-     * @param time	失效时间（秒）
-     * @return boolean
-     */
-    public boolean expire(String key, long time){
-        try {
-            if (time > 0){
-                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    /** 设置值 */
+    public static void set(RedisTemplate<String, String> redis, final String key, final String value){
+        redis.opsForValue().set(key, value);
+    }
+
+    /** 设置值-并设置过期时间 */
+    public static void set(RedisTemplate<String, String> redis, final String hkey, final String value, final Long timeout, final TimeUnit unit) {
+        redis.opsForValue().set(hkey, value, timeout, unit);
+    }
+
+    /** 获取值 */
+    public static String get(RedisTemplate<String, String> redis, final String hmKey){
+        return redis.opsForValue().get(hmKey);
+    }
+
+    /** 获取值 */
+    public static <T> T get(RedisTemplate<String, String> redis, final String hmKey, Class<T> clazz){
+        String str = get(redis, hmKey);
+        if (!StringHelper.isEmpty(str)) {
+            return JsonHelper.jsonToObject(str, clazz);
+        }
+        return null;
+    }
+
+    /** 设置值,如果存在，则忽略并返回false */
+    public static boolean setNX(RedisTemplate<String, String> redis, final String hkey, final String value) {
+        return redis.execute(new RedisCallback<Boolean>() {
+            @Override
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.setNX(hkey.getBytes(utf8), value.getBytes(utf8));
             }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        });
     }
 
-    /**
-     * 根据key 获取缓存失效时间
-     * @param key	键
-     * @return long
-     */
-    public long getExprie(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 判断key是否存在
-     * @param key 键
-     * @return boolean
-     */
-    public boolean hasKey(String key){
-        try {
-            return redisTemplate.hasKey(key);
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 删除缓存
-     * @param key	键
-     * @return void
-     */
-    public void del(String... key){
-        if (key != null && key.length > 0){
-            if (key.length == 1){
-                redisTemplate.delete(key[0]);
-            }else {
-                redisTemplate.delete(CollectionUtils.arrayToList(key));
+    /** 设置值-并设置过期时间,如果存在，则忽略并返回false */
+    public static boolean setNX(RedisTemplate<String, String> redis, final String hkey, final String value, final Long timeout) {
+        Boolean ret = redis.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.setNX(hkey.getBytes(utf8), value.getBytes(utf8));
             }
-        }
+        });
+        return ret && redis.expire(hkey, timeout, TimeUnit.SECONDS);
     }
 
-    // ============================String=============================
-    /**
-     * 普通缓存获取
-     * @param key 键
-     * @return 值
-     */
-    public Object get(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+    /** 设置hash值 */
+    public static void hSet(RedisTemplate<String, String> redis, final String hkey, final String key, final String value) {
+        redis.opsForHash().put(hkey, key, value);
+    }
+
+    /** 设置hash值-并设置过期时间 */
+    public static void hSet(RedisTemplate<String, String> redis, final String hkey, final String key, final String value, final Long timeout, final TimeUnit unit) {
+        redis.opsForHash().put(hkey, key, value);
+        redis.expire(hkey, timeout, unit);
+    }
+
+    /** 设置hash值，如果已存在，则忽略并返回false */
+    public static boolean sAdd(RedisTemplate<String, String> redis, final String hkey,
+                               final String value) {
+        Long ret = redis.execute(new RedisCallback<Long>() {
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.sAdd(hkey.getBytes(utf8),value.getBytes(utf8));
+            }
+        });
+        return ret.intValue() != 0;
+    }
+
+    /** 设置hash值-并设置过期时间，如果已存在，则忽略并返回false */
+    public static boolean sAdd(RedisTemplate<String, String> redis, final String hkey,
+                               final String value, final Long timeout, final TimeUnit unit) {
+        Long ret = redis.execute(new RedisCallback<Long>() {
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.sAdd(hkey.getBytes(utf8), value.getBytes(utf8));
+            }
+        });
+        if(ret.intValue() == 0)
+            return false;
+        return redis.expire(hkey, timeout, unit);
+    }
+
+    /** 删除hash中某个field,不存在该field，则返回false */
+    public static boolean sRem(RedisTemplate<String, String> redis, final String hkey, final String value) {
+        Long ret = redis.execute(new RedisCallback<Long>() {
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.sRem(hkey.getBytes(utf8), value.getBytes(utf8));
+            }
+        });
+        return ret.intValue() == 0;
     }
 
     /**
-     * 普通缓存放入
-     * @param key 键
-     * @param value 值
-     * @return true成功 false失败
+     * 过期key
      */
-    public boolean set(String key, Object value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
+    public static boolean expire(RedisTemplate<String, String> redis, final String key, Long timeout) {
+        return redis.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 过期key
+     */
+    public static boolean expire(RedisTemplate<String, String> redis, final String key) {
+        return redis.expire(key, 0, TimeUnit.SECONDS);
+    }
+
+    /** 验证是否过期 */
+    public static boolean isExpired(RedisTemplate<String, String> redis, final String key) {
+        return redis.hasKey(key) && redis.getExpire(key) > 0;
+    }
+
+    public static boolean deleteSet(RedisTemplate<String, String> redis, final String hkey, final String field) {
+        Long ret = redis.opsForSet().remove(hkey, field);
+        if(ret > 0)
             return true;
+        return false;
+    }
+
+
+    public static void delete(RedisTemplate<String, String> redis, final String hkey, final String field) {
+        redis.opsForHash().delete(hkey, field);
+    }
+
+    public static void delete(RedisTemplate<String, String> redis, final String hkey) {
+        redis.delete(hkey);
+    }
+
+    /** 获取hash所有数据 */
+    public static Map<Object, Object> hGetAll(RedisTemplate<String, String> redis, final String hkey) {
+        return redis.opsForHash().entries(hkey);
+    }
+
+    /** 获取hash某个值 */
+    public static Object hGet(RedisTemplate<String, String> redis, final String hkey, final String field) {
+        return redis.opsForHash().get(hkey, field);
+    }
+
+    /** 判断set中是否存在某个值 */
+    public static Boolean sIsMember(RedisTemplate<String, String> redis, final String key, final String value) {
+        return redis.opsForSet().isMember(key, value);
+    }
+
+    /** 判断是否存在某key */
+    public static Boolean sIsMember(RedisTemplate<String, String> redis, final String key) {
+        return StringHelper.isEmpty(redis.opsForValue().get(key));
+    }
+
+    /** 插入到list */
+    public static void addToList(RedisTemplate<String, String> redis, final String key, final String value) {
+        redis.opsForList().rightPush(key, value);
+    }
+
+    /** 查询数据 */
+    public static List<String> rangeForList(RedisTemplate<String, String> redis, final String key, final int start, final int end) {
+        return redis.opsForList().range(key, start, end);
+    }
+
+    /** 删除数据 */
+    public static void removeFromList(RedisTemplate<String, String> redis, final String key, final long i, final String value) {
+        redis.opsForList().remove(key, i, value);
+    }
+
+    /**
+     * 向zset添加一个或多个成员，或者更新已存在成员的分数
+     * @Description:
+     * @Title: zAdd
+     * @param @param redis
+     * @param @param key
+     * @param @param value
+     * @param @param score
+     * @param @return
+     * @return Boolean
+     * @throws
+     */
+    public static Boolean zAdd(RedisTemplate<String, String> redis, final String key, final Object value, final double score) {
+        return redis.execute(new RedisCallback<Boolean>() {
+
+            @Override
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                String v;
+                if (value instanceof Object) {
+                    v= JsonHelper.objectToJson(value);
+                }else{
+                    v=value.toString();
+                }
+                return connection.zAdd(key.getBytes(utf8), score, v.getBytes(utf8));
+            }
+        });
+    }
+
+    /**
+     * 移除有序集合中给定的字典区间的所有成员
+     * @Description:
+     * @Title: zRem
+     * @param @param redis
+     * @param @param key
+     * @param @param min
+     * @param @param max
+     * @param @return
+     * @return Long
+     * @throws
+     */
+    public static Long zRemRangeByScore(RedisTemplate<String, String> redis, final String key, final long min, final long max) {
+        return redis.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.zRemRange(key.getBytes(utf8), min, max);
+            }
+        });
+    }
+
+    /**
+     * 移除zset集合中一个或多个成员
+     * @Description:
+     * @Title: zRem
+     * @param @param redis
+     * @param @param key
+     * @param @param value
+     * @param @return
+     * @return Long
+     * @throws
+     */
+    public static Long zRem(RedisTemplate<String, String> redis, final String key, final Object value) {
+        return redis.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                String v;
+                if (value instanceof Object) {
+                    v=JsonHelper.objectToJson(value);
+                }else{
+                    v=value.toString();
+                }
+                return connection.zRem(key.getBytes(utf8), v.getBytes(utf8));
+            }
+        });
+    }
+
+    /**
+     * 通过索引区间返回zset指定区间内的成员
+     * @Description:
+     * @Title: zRange
+     * @param @param redis
+     * @param @param key
+     * @param @param begin
+     * @param @param end
+     * @param @return
+     * @return List<String>
+     * @throws
+     */
+    public static List<String> zRange(RedisTemplate<String, String> redis, final String key, final int begin, final int end) {
+        return redis.execute(new RedisCallback<List<String>>() {
+            @Override
+            public List<String> doInRedis(RedisConnection connection) throws DataAccessException {
+
+                Set<byte[]> set =  connection.zRange(key.getBytes(utf8), begin, end);
+                List<String> list = new ArrayList<String>();
+                for (byte[] arr : set) {
+                    list.add(new String(arr));
+                }
+                return list;
+            }
+        });
+    }
+
+    /**
+     * 查找zset中指定成员的索引
+     * @Description:
+     * @Title: zRank
+     * @param @param redis
+     * @param @param key
+     * @param @param value
+     * @param @return
+     * @return Long
+     * @throws
+     */
+    public static Long zRank(RedisTemplate<String, String> redis, final String key, final Object value) {
+        return redis.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                String v;
+                if (value instanceof Object) {
+                    v=JsonHelper.objectToJson(value);
+                }else{
+                    v=value.toString();
+                }
+                Long result =  connection.zRank(key.getBytes(utf8), v.getBytes(utf8));
+                return result;
+            }
+        });
+    }
+
+    /**
+     * 通过分数获取zset集合指定区间的成员
+     * @Description:
+     * @Title: zRangeByScore
+     * @param @param redis
+     * @param @param key
+     * @param @param min
+     * @param @param max
+     * @param @return
+     * @return Set<String>
+     * @throws
+     */
+    public static List<String> zRangeByScore(RedisTemplate<String, String> redis, final String key, final long min, final long max) {
+        return redis.execute(new RedisCallback<List<String>>() {
+            @Override
+            public List<String> doInRedis(RedisConnection connection) throws DataAccessException {
+
+                Set<byte[]> set =  connection.zRangeByScore(key.getBytes(utf8), min, max);
+                List<String> list = new ArrayList<String>();
+                for (byte[] arr : set) {
+                    list.add(new String(arr));
+                }
+                return list;
+            }
+        });
+    }
+
+    /**
+     * 获取zset集合的成员数
+     * @Description:
+     * @Title: zCard
+     * @param @param redis
+     * @param @param key
+     * @param @return
+     * @return Long
+     * @throws
+     */
+    public static Long zCard(RedisTemplate<String, String> redis, final String key) {
+        return redis.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+
+                Long result =  connection.zCard(key.getBytes(utf8));
+                return result;
+            }
+        });
+    }
+
+    /**
+     * 获取唯一Id
+     * @param key
+     * @param delta 增加量（不传采用1）
+     * @return
+     * @throws Exception
+     */
+    public static String incrementHash(RedisTemplate<String,String> redis, String key, Long delta) {
+        try {
+            if (null == delta) {
+                delta=1L;
+            }
+            return redis.opsForValue().increment(key, delta).toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    /**
-     * 普通缓存放入并设置时间
-     * @param key 键
-     * @param value 值
-     * @param time 时间(秒) time要大于0 如果time小于等于0 将设置无限期
-     * @return true成功 false 失败
-     */
-    public boolean set(String key, Object value, long time) {
-        try {
-            if (time > 0) {
-                redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
-            } else {
-                set(key, value);
+            //redis宕机时采用uuid的方式生成唯一id
+            int first = new Random(10).nextInt(8) + 1;
+            int randNo = UUIDHelper.getUUID().hashCode();
+            if (randNo < 0) {
+                randNo = -randNo;
             }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            return first + String.format("%16d", randNo);
         }
     }
 
     /**
-     * 递增
-     * @param key 键
-     * @param delta 要增加几(大于0)
+     * 自增值
+     * @param redis
+     * @param key
+     * @param delta 增加量（不传采用1）
      * @return
      */
-    public long incr(String key, long delta) {
-        if (delta < 0) {
-            throw new RuntimeException("递增因子必须大于0");
-        }
-        return redisTemplate.opsForValue().increment(key, delta);
-    }
-
-    /**
-     * 递减
-     * @param key 键
-     * @param delta 要减少几(小于0)
-     * @return
-     */
-    public long decr(String key, long delta) {
-        if (delta < 0) {
-            throw new RuntimeException("递减因子必须大于0");
-        }
-        return redisTemplate.opsForValue().increment(key, -delta);
-    }
-
-    // ================================Map=================================
-    /**
-     * HashGet
-     * @param key 键 不能为null
-     * @param item 项 不能为null
-     * @return 值
-     */
-    public Object hget(String key, String item) {
-        return redisTemplate.opsForHash().get(key, item);
-    }
-
-    /**
-     * 获取hashKey对应的所有键值
-     * @param key 键
-     * @return 对应的多个键值
-     */
-    public Map<Object, Object> hmget(String key) {
-        return redisTemplate.opsForHash().entries(key);
-    }
-
-    /**
-     * HashSet
-     * @param key 键
-     * @param map 对应多个键值
-     * @return true 成功 false 失败
-     */
-    public boolean hmset(String key, Map<String, Object> map) {
+    public static Long setIncrement(RedisTemplate<String,String> redis, String key, Long delta) {
         try {
-            redisTemplate.opsForHash().putAll(key, map);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * HashSet 并设置时间
-     * @param key 键
-     * @param map 对应多个键值
-     * @param time 时间(秒)
-     * @return true成功 false失败
-     */
-    public boolean hmset(String key, Map<String, Object> map, long time) {
-        try {
-            redisTemplate.opsForHash().putAll(key, map);
-            if (time > 0) {
-                expire(key, time);
+            if (null == delta) {
+                delta=1L;
             }
-            return true;
+            return redis.opsForValue().increment(key, delta);
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 向一张hash表中放入数据,如果不存在将创建
-     * @param key 键
-     * @param item 项
-     * @param value 值
-     * @return true 成功 false失败
-     */
-    public boolean hset(String key, String item, Object value) {
-        try {
-            redisTemplate.opsForHash().put(key, item, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 向一张hash表中放入数据,如果不存在将创建
-     * @param key 键
-     * @param item 项
-     * @param value 值
-     * @param time 时间(秒) 注意:如果已存在的hash表有时间,这里将会替换原有的时间
-     * @return true 成功 false失败
-     */
-    public boolean hset(String key, String item, Object value, long time) {
-        try {
-            redisTemplate.opsForHash().put(key, item, value);
-            if (time > 0) {
-                expire(key, time);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 删除hash表中的值
-     * @param key 键 不能为null
-     * @param item 项 可以使多个 不能为null
-     */
-    public void hdel(String key, Object... item) {
-        redisTemplate.opsForHash().delete(key, item);
-    }
-
-    /**
-     * 判断hash表中是否有该项的值
-     * @param key 键 不能为null
-     * @param item 项 不能为null
-     * @return true 存在 false不存在
-     */
-    public boolean hHasKey(String key, String item) {
-        return redisTemplate.opsForHash().hasKey(key, item);
-    }
-
-    /**
-     * hash递增 如果不存在,就会创建一个 并把新增后的值返回
-     * @param key 键
-     * @param item 项
-     * @param by 要增加几(大于0)
-     * @return
-     */
-    public double hincr(String key, String item, double by) {
-        return redisTemplate.opsForHash().increment(key, item, by);
-    }
-
-    /**
-     * hash递减
-     * @param key 键
-     * @param item 项
-     * @param by 要减少记(小于0)
-     * @return
-     */
-    public double hdecr(String key, String item, double by) {
-        return redisTemplate.opsForHash().increment(key, item, -by);
-    }
-
-    // ============================set=============================
-    /**
-     * 根据key获取Set中的所有值
-     * @param key 键
-     * @return
-     */
-    public Set<Object> sGet(String key) {
-        try {
-            return redisTemplate.opsForSet().members(key);
-        } catch (Exception e) {
-            e.printStackTrace();
             return null;
-        }
-    }
-
-    /**
-     * 根据value从一个set中查询,是否存在
-     * @param key 键
-     * @param value 值
-     * @return true 存在 false不存在
-     */
-    public boolean sHasKey(String key, Object value) {
-        try {
-            return redisTemplate.opsForSet().isMember(key, value);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 将数据放入set缓存
-     * @param key 键
-     * @param values 值 可以是多个
-     * @return 成功个数
-     */
-    public long sSet(String key, Object... values) {
-        try {
-            return redisTemplate.opsForSet().add(key, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    /**
-     * 将set数据放入缓存
-     * @param key 键
-     * @param time 时间(秒)
-     * @param values 值 可以是多个
-     * @return 成功个数
-     */
-    public long sSetAndTime(String key, long time, Object... values) {
-        try {
-            Long count = redisTemplate.opsForSet().add(key, values);
-            if (time > 0) {
-                expire(key, time);
-            }
-            return count;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    /**
-     * 获取set缓存的长度
-     * @param key 键
-     * @return
-     */
-    public long sGetSetSize(String key) {
-        try {
-            return redisTemplate.opsForSet().size(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    /**
-     * 移除值为value的
-     * @param key 键
-     * @param values 值 可以是多个
-     * @return 移除的个数
-     */
-    public long setRemove(String key, Object... values) {
-        try {
-            Long count = redisTemplate.opsForSet().remove(key, values);
-            return count;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-    // ===============================list=================================
-
-    /**
-     * 获取list缓存的内容
-     * @param key 键
-     * @param start 开始
-     * @param end 结束 0 到 -1代表所有值
-     * @return
-     */
-    public List<Object> lGet(String key, long start, long end) {
-        try {
-            return redisTemplate.opsForList().range(key, start, end);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 获取list缓存的长度
-     * @param key 键
-     * @return
-     */
-    public long lGetListSize(String key) {
-        try {
-            return redisTemplate.opsForList().size(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    /**
-     * 通过索引 获取list中的值
-     * @param key 键
-     * @param index 索引 index>=0时， 0 表头，1 第二个元素，依次类推；index<0时，-1，表尾，-2倒数第二个元素，依次类推
-     * @return
-     */
-    public Object lGetIndex(String key, long index) {
-        try {
-            return redisTemplate.opsForList().index(key, index);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 将list放入缓存
-     * @param key 键
-     * @param value 值
-     * @return
-     */
-    public boolean lSet(String key, Object value) {
-        try {
-            redisTemplate.opsForList().rightPush(key, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 将list放入缓存
-     * @param key 键
-     * @param value 值
-     * @param time 时间(秒)
-     * @return
-     */
-    public boolean lSet(String key, Object value, long time) {
-        try {
-            redisTemplate.opsForList().rightPush(key, value);
-            if (time > 0) {
-                expire(key, time);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 将list放入缓存
-     * @param key 键
-     * @param value 值
-     * @return
-     */
-    public boolean lSet(String key, List<Object> value) {
-        try {
-            redisTemplate.opsForList().rightPushAll(key, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 将list放入缓存
-     * @param key 键
-     * @param value 值
-     * @param time 时间(秒)
-     * @return
-     */
-    public boolean lSet(String key, List<Object> value, long time) {
-        try {
-            redisTemplate.opsForList().rightPushAll(key, value);
-            if (time > 0) {
-                expire(key, time);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 根据索引修改list中的某条数据
-     * @param key 键
-     * @param index 索引
-     * @param value 值
-     * @return
-     */
-    public boolean lUpdateIndex(String key, long index, Object value) {
-        try {
-            redisTemplate.opsForList().set(key, index, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 移除N个值为value
-     * @param key 键
-     * @param count 移除多少个
-     * @param value 值
-     * @return 移除的个数
-     */
-    public long lRemove(String key, long count, Object value) {
-        try {
-            Long remove = redisTemplate.opsForList().remove(key, count, value);
-            return remove;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
         }
     }
 }
