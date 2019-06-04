@@ -7,6 +7,8 @@ import com.xiao5.ordercenter.dataorder.repository.UserRepository;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +36,9 @@ public class UsersServiceImpl implements IUsersService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 根据用户Id查询用户信息
      * @author Wu TianBing
@@ -41,6 +46,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param  id 用户Id
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
+    @Cacheable(value = "userCache", key ="#id")
     @Override
     public NetResponse<Users> qryUsersById(Integer id) {
         NetResponse<Users> response = new NetResponse<>();
@@ -112,6 +118,7 @@ public class UsersServiceImpl implements IUsersService {
      * @param
      * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
      */
+    @Cacheable(value = "findAll")
     @Override
     public NetResponse<List<Users>> findAll() {
         NetResponse<List<Users>> netResponse = new NetResponse<>();
