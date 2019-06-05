@@ -1,6 +1,5 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
-import com.xiao5.ordercenter.common.code.BaseCode;
 import com.xiao5.ordercenter.common.entity.NetRequest;
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;

@@ -28,6 +28,7 @@ spring:
   application:
     name: Order-Data
 
+
 # mybatis 相关配置信息
 mybatis:
   type-aliases-package: com.xiao5.ordercenter.common.entity
@@ -46,3 +47,8 @@ info:
   company.name: Msxiao5
   build.port: ${server.port}
   build.name: ${spring.application.name}
+
+logging:
+  file: log/orderdata/DataOrder.log
+  level:
+    com.xiao5.ordercenter.dataorder: info
