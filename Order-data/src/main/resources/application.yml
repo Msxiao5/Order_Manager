@@ -50,5 +50,6 @@ info:
 
 logging:
   file: log/orderdata/DataOrder.log
+  file.max-size: 10MB
   level:
     com.xiao5.ordercenter.dataorder: info

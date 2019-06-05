@@ -1,5 +1,6 @@
 package com.xiao5.ordercenter.dataorder.controller;
 
+import com.xiao5.ordercenter.common.annotation.Logs;
 import com.xiao5.ordercenter.common.entity.NetRequest;
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
@@ -36,6 +37,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
     @GetMapping("/qry/{id}")
+    @Logs(value = "根据客户ID查询客户", type = "Post")
     public NetResponse<Users> qryUsersById(@PathVariable("id") Integer id){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
