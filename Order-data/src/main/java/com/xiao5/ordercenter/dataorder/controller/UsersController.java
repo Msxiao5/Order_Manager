@@ -37,7 +37,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.user.Users
      */
     @GetMapping("/qry/{id}")
-    @Logs(value = "根据客户ID查询客户", type = "Post")
+    @Logs(value = "根据客户ID查询客户", type = "Get")
     public NetResponse<Users> qryUsersById(@PathVariable("id") Integer id){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
@@ -57,6 +57,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.NetResponse
      */
     @PostMapping("/add")
+    @Logs(value = "保存用户", type = "Post")
     public NetResponse saveUser(@RequestBody NetRequest<Users> request){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
@@ -80,6 +81,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.NetResponse
      */
     @GetMapping("/delete/{id}")
+    @Logs(value = "根据用户ID 删除用户信息", type = "Get")
     public NetResponse deleteUser(@PathVariable("id") Integer id){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
@@ -103,6 +105,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.NetResponse
      */
     @PostMapping("/update")
+    @Logs(value = "修改用户信息", type = "Post")
     public NetResponse updateUser(@RequestBody NetRequest<Users> request){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
@@ -127,6 +130,7 @@ public class UsersController {
      * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
      */
     @GetMapping("/findAll")
+    @Logs(value = "使用JPA查询所有用户数据", type = "Get")
     public NetResponse<List<Users>> select(){
         //调用开始时间
         long startTimeMillis = System.currentTimeMillis();
