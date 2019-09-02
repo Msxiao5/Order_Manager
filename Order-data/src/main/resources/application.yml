@@ -7,6 +7,18 @@ spring:
     username: root
     password: Abc123!_
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 1000
+    password: redis
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 1
+        min-idle: 0
+        max-idle: 8
 
 # JPA 相关配置信息
   jpa:
@@ -15,6 +27,7 @@ spring:
     show-sql: true
   application:
     name: Order-Data
+
 
 # mybatis 相关配置信息
 mybatis:
@@ -34,3 +47,9 @@ info:
   company.name: Msxiao5
   build.port: ${server.port}
   build.name: ${spring.application.name}
+
+logging:
+  file: log/orderdata/DataOrder.log
+  file.max-size: 10MB
+  level:
+    com.xiao5.ordercenter.dataorder: info

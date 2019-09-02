@@ -21,7 +21,6 @@ public interface IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 16:22
      * @param users 用户信息
-     * @return int
      */
     int saveUser(Users users);
 
@@ -30,7 +29,6 @@ public interface IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 16:31
      * @param id 用户ID
-     * @return int
      */
     int deleteUser(Integer id);
 
@@ -39,7 +37,6 @@ public interface IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 17:34
      * @param users	 用户信息
-     * @return int
      */
     int updateUser(Users users);
 
@@ -50,5 +47,5 @@ public interface IUsersService {
      * @param
      * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
      */
-    NetResponse<List<Users>> findAll();
+    List<Users> findAll();
 }
