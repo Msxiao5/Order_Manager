@@ -2,6 +2,7 @@ package com.xiao5.ordercenter.dataorder;
 
 import com.xiao5.ordercenter.common.entity.NetResponse;
 import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.common.utils.UUIDHelper;
 import com.xiao5.ordercenter.dataorder.controller.UsersController;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.Data;
@@ -9,15 +10,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IntSummaryStatistics;
-import java.util.List;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -36,8 +36,50 @@ public class DataorderApplicationTests {
 
     @Test
     public void contextLoads() {
+        String key = "hello";
+        String val = "world";
+        redisTemplate.execute((RedisCallback<Void>) redisConnection -> {
+            redisConnection.set(key.getBytes(),val.getBytes());
+            return null;
+        });
+
+        String execute = redisTemplate.execute((RedisCallback<? extends String>) redisConnection -> new String(redisConnection.get(key.getBytes())));
+        System.out.println(execute);
+
+        String hket = "hKey";
+        redisTemplate.execute((RedisCallback<Void>) con ->{
+            con.hSet(hket.getBytes(),"23".getBytes(), "why".getBytes());
+            return null;
+        });
+
+        Map<byte[], byte[]> map = redisTemplate.execute((RedisCallback<? extends Map<byte[], byte[]>>) con ->
+            con.hGetAll(hket.getBytes())
+        );
+
+        map.forEach((bytes, bytes2) -> System.out.println("key : " + new String(bytes) + "  | value : " + new String(bytes2)));
+        map.entrySet().forEach(entry -> System.out.println("key : " + new String(entry.getKey()) + "  | value : " + new String(entry.getValue())));
+
+        System.out.println("UUID:" + UUIDHelper.getUUID());
+
+        System.out.println(uuid(true));
+
+        System.out.println(getLong());
+
     }
 
+    public static String uuid(boolean hasPrefix) {
+        String uuid = UUID.randomUUID().toString();
+        if (!hasPrefix) {
+            uuid = uuid.replaceAll("-", "");
+        }
+        return uuid;
+    }
+
+    private static SecureRandom random = new SecureRandom();
+
+    public static long getLong() {
+        return Math.abs(random.nextLong());
+    }
 
     public static void main(String[] args) {
         List<Integer> list = new ArrayList<>();
@@ -81,6 +123,8 @@ public class DataorderApplicationTests {
 
 
         System.out.println("工资：" + (10000/22)/8*36);
+
+
     }
 
     public static void print(Integer id){
