@@ -131,7 +131,7 @@ public class UsersServiceImpl implements IUsersService {
     @Override
     public List<Users> findAll() {
         log.info("【查询所有用户】");
-        List<Users> userList = userRepository.findAll();
+        List<Users> userList = usersMapper.findAll();
         RedisHelper.set(redisTemplate, "Users:All" , JsonHelper.objectToJson(userList));
         log.info("【查询所有用户成功，用户信息为：{}】",JsonHelper.objectToJson(userList));
         return userList;

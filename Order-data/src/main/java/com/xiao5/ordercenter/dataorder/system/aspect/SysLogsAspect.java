@@ -4,7 +4,7 @@ import com.xiao5.ordercenter.common.annotation.Logs;
 import com.xiao5.ordercenter.common.entity.Syslogs;
 import com.xiao5.ordercenter.common.utils.IPUtils;
 import com.xiao5.ordercenter.common.utils.JsonHelper;
-import com.xiao5.ordercenter.dataorder.repository.SysLogsRepository;
+import com.xiao5.ordercenter.dataorder.mapper.SysLogsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -32,7 +32,7 @@ import java.util.Date;
 public class SysLogsAspect {
 
     @Autowired
-    SysLogsRepository sysLogsRepository;
+    SysLogsMapper sysLogsMapper;
 
 
     @Pointcut("@annotation(com.xiao5.ordercenter.common.annotation.Logs)")
@@ -83,7 +83,7 @@ public class SysLogsAspect {
         // 时间
         syslogs.setCreateDate(new Date());
 
-        sysLogsRepository.save(syslogs);
+        sysLogsMapper.save(syslogs);
     }
 
 }
