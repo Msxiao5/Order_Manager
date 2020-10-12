@@ -1,6 +1,6 @@
 package com.xiao5.ordercenter.dataorder.mapper;
 
-import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.dataorder.entity.Users;
 import org.apache.ibatis.annotations.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -21,7 +21,7 @@ public interface UsersMapper extends Serializable, JpaRepository<Users, Integer>
      * @author Wu TianBing
      * @date 2019/3/21 17:12
      * @param  id 用户Id
-     * @return com.xiao5.ordercenter.common.entity.user.Users
+     * @return com.xiao5.ordercenter.dataorder.entity.Users
      */
     Users qryUsersById(@Param(value = "id") Integer id);
 

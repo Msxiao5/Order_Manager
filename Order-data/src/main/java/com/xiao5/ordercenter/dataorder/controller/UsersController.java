@@ -3,7 +3,7 @@ package com.xiao5.ordercenter.dataorder.controller;
 import com.xiao5.ordercenter.common.annotation.Logs;
 import com.xiao5.ordercenter.common.entity.NetRequest;
 import com.xiao5.ordercenter.common.entity.NetResponse;
-import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.dataorder.entity.Users;
 import com.xiao5.ordercenter.common.enumType.exception.DataErrorEnum;
 import com.xiao5.ordercenter.common.exception.BaseException;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
@@ -34,7 +34,7 @@ public class UsersController {
      * @author Wu TianBing
      * @date 2019/3/21 17:12
      * @param  id 用户Id
-     * @return com.xiao5.ordercenter.common.entity.user.Users
+     * @return com.xiao5.ordercenter.dataorder.entity.Users
      */
     @GetMapping("/qry/{id}")
     @Logs(value = "根据客户ID查询客户", type = "Get")
@@ -127,7 +127,7 @@ public class UsersController {
      * @author Wu Tianbing
      * @date 2019-05-29 20:52
      * @param
-     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
+     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.dataorder.entity.Users>>
      */
     @GetMapping("/findAll")
     @Logs(value = "使用JPA查询所有用户数据", type = "Get")

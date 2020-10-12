@@ -10,7 +10,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:7005/eureka # 注册eureka service地址
   instance:
-    instance-id: Order-Config-7003 # 重命名实力名称
+    instance-id: Order-Config # 重命名实力名称
     prefer-ip-address: true # 显示IP地址
 
 info:

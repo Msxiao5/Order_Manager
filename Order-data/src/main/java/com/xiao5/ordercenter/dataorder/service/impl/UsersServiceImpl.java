@@ -1,20 +1,15 @@
 package com.xiao5.ordercenter.dataorder.service.impl;
 
-import com.xiao5.ordercenter.common.code.BaseCode;
 import com.xiao5.ordercenter.common.entity.NetResponse;
-import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.dataorder.entity.Users;
 import com.xiao5.ordercenter.common.enumType.exception.DataErrorEnum;
 import com.xiao5.ordercenter.common.exception.BaseException;
 import com.xiao5.ordercenter.common.utils.JsonHelper;
 import com.xiao5.ordercenter.common.utils.RedisHelper;
 import com.xiao5.ordercenter.dataorder.mapper.UsersMapper;
-import com.xiao5.ordercenter.dataorder.repository.UserRepository;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +32,6 @@ public class UsersServiceImpl implements IUsersService {
     @Resource
     UsersMapper usersMapper;
 
-    /**
-     * Jpa持久层
-     */
-    @Autowired
-    UserRepository userRepository;
-
     @Autowired
     RedisTemplate redisTemplate;
 
@@ -51,7 +40,7 @@ public class UsersServiceImpl implements IUsersService {
      * @author Wu TianBing
      * @date 2019/3/21 17:12
      * @param  id 用户Id
-     * @return com.xiao5.ordercenter.common.entity.user.Users
+     * @return com.xiao5.ordercenter.dataorder.entity.Users
      */
     //@Cacheable(value = "Users", key ="#id")
     @Override
@@ -125,7 +114,7 @@ public class UsersServiceImpl implements IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 20:52
      * @param
-     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
+     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.dataorder.entity.Users>>
      */
   //  @Cacheable(value = "Users")
     @Override

@@ -1,9 +1,6 @@
 package com.xiao5.ordercenter.dataorder;
 
-import com.xiao5.ordercenter.common.entity.NetResponse;
-import com.xiao5.ordercenter.common.entity.user.Users;
 import com.xiao5.ordercenter.common.utils.UUIDHelper;
-import com.xiao5.ordercenter.dataorder.controller.UsersController;
 import com.xiao5.ordercenter.dataorder.service.IUsersService;
 import lombok.Data;
 import org.junit.Test;
@@ -12,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;

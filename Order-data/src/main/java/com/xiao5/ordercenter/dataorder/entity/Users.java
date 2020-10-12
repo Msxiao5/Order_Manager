@@ -1,4 +1,4 @@
-package com.xiao5.ordercenter.common.entity.user;
+package com.xiao5.ordercenter.dataorder.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.xiao5.ordercenter.dataorder.service;
 
 import com.xiao5.ordercenter.common.entity.NetResponse;
-import com.xiao5.ordercenter.common.entity.user.Users;
+import com.xiao5.ordercenter.dataorder.entity.Users;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface IUsersService {
      * @author Wu TianBing
      * @date 2019/3/21 17:12
      * @param  id 用户Id
-     * @return com.xiao5.ordercenter.common.entity.user.Users
+     * @return com.xiao5.ordercenter.dataorder.entity.Users
      */
     NetResponse<Users> qryUsersById(Integer id);
 
@@ -45,7 +45,7 @@ public interface IUsersService {
      * @author Wu Tianbing
      * @date 2019-05-29 20:52
      * @param
-     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.common.entity.user.Users>>
+     * @return com.xiao5.ordercenter.common.entity.NetResponse<java.util.List<com.xiao5.ordercenter.dataorder.entity.Users>>
      */
     List<Users> findAll();
 }
